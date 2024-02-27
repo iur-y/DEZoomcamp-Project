@@ -1,7 +1,8 @@
 import pandas as pd
 import random
 from random_utils import create_list_of_years, create_num_refunds, create_num_sales, create_random_date, create_random_name
-from constants import FILENAME, dtypes
+from constants import FILENAME, dtypes, schema
+import pyarrow as pa
 
 # TODO: perhaps generate a new years list once I'm done writing a batch of files
 
@@ -40,4 +41,6 @@ for _ in range(1):
     s["Refunds"] = create_num_refunds(s["Rank"].values[0], s["Global_Sales"].values[0])
     s.drop("Rank", axis=1, inplace=True)
 
-print(repr(s))
+    table = pa.Table.from_pandas(s, preserve_index=False, schema=schema)
+
+print(repr(table))
