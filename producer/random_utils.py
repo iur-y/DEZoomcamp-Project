@@ -62,17 +62,21 @@ def create_random_name(name: str):
         - which means there are names with two characters
         - some names contain non-alphanumeric characters such as `+`
     """
-    # Define an upper bound so that random.randint can work properly
+
     length = len(name)
-    upper_bound = 3 if length >= 3 else length
+
+    # Upper and lower bounds for random.randint()
+    upper = length // 5 + 3
+    lower = length // 6 + 1
 
     name = list(name)
 
     # Sample the characters that will be replaced
-    # TODO: HANDLE NUMBERS IN THE NAMES
-    
-    chars_indices = random.sample(range(length), random.randint(1, upper_bound))
-    chars_indices = [idx for idx in chars_indices if name[idx] != ' ']  # discard spaces
+    chars_indices = random.sample(range(length),
+                                  random.randint(lower, upper))
+    # Remove any indices that map to spaces or digits
+    chars_indices = [idx for idx in chars_indices
+                     if name[idx] != ' ' and not name[idx].isdigit()]
     chars = [name[idx] for idx in chars_indices]
 
     # Check which characters are uppercased
