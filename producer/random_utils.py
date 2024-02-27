@@ -16,7 +16,7 @@ consonants_d = {True: U_CONSONANTS, False: L_CONSONANTS}
 
 def create_list_of_years(*,
                          mean: int = 2020,
-                         std: int = 20,
+                         std: int = 15,
                          size: int = 5000) -> List[int]:
     """
     This is used by `create_random_datetime`
@@ -31,7 +31,7 @@ def create_list_of_years(*,
     normal_values = np.random.normal(loc=mean, scale=std, size=size)
 
     # Filter out values in the right half
-    return [int(value) for value in normal_values if value < mean]
+    return [int(value) for value in normal_values if value <= mean and value >= 1980]
 
 def create_random_datetime(*, random_years: List) -> datetime.date:
     """
@@ -69,6 +69,8 @@ def create_random_name(name: str):
     name = list(name)
 
     # Sample the characters that will be replaced
+    # TODO: HANDLE NUMBERS IN THE NAMES
+    
     chars_indices = random.sample(range(length), random.randint(1, upper_bound))
     chars_indices = [idx for idx in chars_indices if name[idx] != ' ']  # discard spaces
     chars = [name[idx] for idx in chars_indices]
