@@ -94,8 +94,8 @@ def create_num_refunds(rank: int, sales: int) -> int:
     Takes the rank of a game and how many global sales the game had
     and returns a random number representing refunds 
     """
-    return random.gauss(sales, sales*random.uniform(0.0, 0.25))\
-            * (9.17e-7 * rank + 0.00005)
+    return int(random.gauss(sales, sales*random.uniform(0.0, 0.25))\
+            * (9.17e-7 * rank + 0.00005))
 
 def create_num_sales(sales: int) -> int:
     """
