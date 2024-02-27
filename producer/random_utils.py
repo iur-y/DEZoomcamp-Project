@@ -33,12 +33,12 @@ def create_list_of_years(*,
     # Filter out values in the right half
     return [int(value) for value in normal_values if value <= mean and value >= 1980]
 
-def create_random_datetime(*, random_years: List) -> datetime.date:
+def create_random_datetime(*, years: List) -> datetime.date:
     """
     Picks an year from random_years (created by `create_list_of_years`)
     and then tries to return a date out of it
     """
-    year = random.choice(random_years)
+    year = random.choice(years)
     month = random.randint(1, 12)
     while True:
         try:
