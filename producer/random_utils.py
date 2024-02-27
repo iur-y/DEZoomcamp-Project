@@ -2,14 +2,7 @@ import numpy as np
 import random
 from typing import List
 import datetime
-
-VOWELS_SET = frozenset(["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"])
-
-L_VOWELS = ["a", "e", "i", "o", "u"]
-U_VOWELS = ["A", "E", "I", "O", "U"]
-
-L_CONSONANTS = ["b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z"]
-U_CONSONANTS = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "V", "W", "X", "Y", "Z"]
+from constants import VOWELS_SET, L_CONSONANTS, L_VOWELS, U_CONSONANTS, U_VOWELS
 
 vowels_d = {True: U_VOWELS, False: L_VOWELS}
 consonants_d = {True: U_CONSONANTS, False: L_CONSONANTS}
@@ -31,7 +24,8 @@ def create_list_of_years(*,
     normal_values = np.random.normal(loc=mean, scale=std, size=size)
 
     # Filter out values in the right half
-    return [int(value) for value in normal_values if value <= mean and value >= 1980]
+    return [int(value) for value in normal_values
+            if value <= mean and value >= 1980]
 
 def create_random_datetime(*, years: List) -> datetime.date:
     """
