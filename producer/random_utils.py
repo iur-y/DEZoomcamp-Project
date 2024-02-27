@@ -27,7 +27,7 @@ def create_list_of_years(*,
     return [int(value) for value in normal_values
             if value <= mean and value >= 1980]
 
-def create_random_datetime(*, years: List) -> datetime.date:
+def create_random_date(*, years: List) -> datetime.date:
     """
     Picks an year from random_years (created by `create_list_of_years`)
     and then tries to return a date out of it
