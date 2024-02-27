@@ -1,3 +1,5 @@
+import pyarrow as pa
+
 ##### Constants for random_utils.py #####
 VOWELS_SET = frozenset(["a", "e", "i", "o", "u", "A", "E", "I", "O", "U"])
 
@@ -14,6 +16,7 @@ U_CONSONANTS = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P",
 ##### Constants for producer.py #####
 FILENAME = "./base_data/no_year_vgsales.csv"
 
+# Types for reading the base file
 dtypes = {
     "NA_Sales": int,
     "EU_Sales": int,
@@ -22,3 +25,17 @@ dtypes = {
     "Global_Sales": int,
 }
 
+# Schema for converting pandas DataFrame to pyarrow Table
+schema = pa.schema([
+    ("Name", pa.string()),
+    ("Platform", pa.string()),
+    ("Genre", pa.string()),
+    ("Publisher", pa.string()),
+    ("NA_Sales", pa.int64()),
+    ("EU_Sales", pa.int64()),
+    ("JP_Sales", pa.int64()),
+    ("Other_Sales", pa.int64()),
+    ("Global_Sales", pa.int64()),
+    ("Date", pa.date32()),
+    ("Refunds", pa.int64())
+])
