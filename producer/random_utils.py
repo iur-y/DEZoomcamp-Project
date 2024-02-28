@@ -7,6 +7,8 @@ from constants import VOWELS_SET, L_CONSONANTS, L_VOWELS, U_CONSONANTS, U_VOWELS
 vowels_d = {True: U_VOWELS, False: L_VOWELS}
 consonants_d = {True: U_CONSONANTS, False: L_CONSONANTS}
 
+# TODO: add dirty data somehow, maybe hand out date as string
+
 def create_list_of_years(*,
                          mean: int = 2020,
                          std: int = 15,
@@ -60,7 +62,10 @@ def create_random_name(name: str):
     length = len(name)
 
     # Upper and lower bounds for random.randint()
-    upper = length // 5 + 3
+    if length < 3:
+        upper = length
+    else:
+        upper = length // 5 + 3
     lower = length // 6 + 1
 
     name = list(name)
@@ -68,6 +73,7 @@ def create_random_name(name: str):
     # Sample the characters that will be replaced
     chars_indices = random.sample(range(length),
                                   random.randint(lower, upper))
+
     # Remove any indices that map to spaces or digits
     chars_indices = [idx for idx in chars_indices
                      if name[idx] != ' ' and not name[idx].isdigit()]
