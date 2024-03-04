@@ -6,6 +6,7 @@ from constants import BASEFILE, sale_columns, dtypes, schema
 import pyarrow as pa
 import pyarrow.parquet as pq
 from datetime import datetime, timezone
+import duckdb
 
 """
 Next step: decide how app.py is going to read the parquet file and stream the records out
@@ -27,8 +28,16 @@ df = pd.read_csv(BASEFILE, dtype=dtypes, header=0)
 # Create list of years from 1980 - 2020
 years = create_list_of_years()
 
+# get current time to name the file that is about to be created
+dt_obj = datetime.now(timezone.utc)
+now = dt_obj.isoformat()
+
 # Create parquet writer, it does not create directories, only filename
-writer = pq.ParquetWriter('./2024/02/28/24-02-28T18:42:30.parquet', schema)
+""" vvv READ THIS vvv """
+# By the way, when I create the directory 2024/03/04 with bash, I have to use UTC time to create them
+# and them pass those as parameters to this script so it can enter the correct directory
+# app.py will use UTC times to access the directories and read the files as well, so it's important
+writer = pq.ParquetWriter(f'./2024/02/28/{now}.parquet', schema)
 for _ in range(10_000):
     # Select random record to make fake data from
     s = df.iloc[[random.randint(0, df.shape[0]-1)]].copy()
@@ -55,3 +64,9 @@ for _ in range(10_000):
     # TODO: USE DUCKDB TO READ THE PARQUET WRITTEN FILES
 
 writer.close()
+
+# add filename entry to duckdb
+with duckdb.connect("./2024/02/28/filenames.duckdb") as con:
+    con.sql("CREATE TABLE IF NOT EXISTS dates (dt_aware TIMESTAMPTZ)")
+    stmt = f"INSERT INTO dates VALUES ('{now}')"
+    con.sql(stmt)
