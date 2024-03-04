@@ -14,7 +14,9 @@ U_CONSONANTS = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P",
 
 
 ##### Constants for producer.py #####
-FILENAME = "./base_data/no_year_vgsales.csv"
+BASEFILE = "./base_data/no_year_vgsales.csv"
+
+sale_columns = ("NA_Sales","EU_Sales" ,"JP_Sales" ,"Other_Sales")
 
 # Types for reading the base file
 dtypes = {
