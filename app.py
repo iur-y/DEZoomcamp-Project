@@ -1,5 +1,5 @@
 from flask import Flask, request, abort
-from app.app_utils import validate_filenames
+from app.app_utils import validate_filenames, validate_args
 
 app = Flask(__name__)
 
@@ -25,6 +25,10 @@ def hello_world():
 # requests range of files, i use duckdb to query which files should be opened
 @app.route('/data', methods=['GET'])
 def hand_out_json():
+    # validate request args
+    if not validate_args(request.args):
+        abort(400, "Unexpected parameters passed")
+
     start = request.args.get("start")
     end = request.args.get("end")
 
@@ -33,7 +37,7 @@ def hand_out_json():
         abort(400, "Parameter passed with invalid ISO 8601 format")
 
     d = {"This is what you provided as start": start,
-         "And as end": end}
+         "While as end": end}
     return d
 
 if __name__ == "__main__":
