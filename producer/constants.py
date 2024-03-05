@@ -38,6 +38,6 @@ schema = pa.schema([
     ("JP_Sales", pa.int64()),
     ("Other_Sales", pa.int64()),
     ("Global_Sales", pa.int64()),
-    ("Date", pa.date32()),
+    ("Date", pa.string()),
     ("Refunds", pa.int64())
 ])

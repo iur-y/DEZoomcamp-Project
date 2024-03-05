@@ -29,10 +29,10 @@ def create_list_of_years(*,
     return [int(value) for value in normal_values
             if value <= mean and value >= 1980]
 
-def create_random_date(*, years: List) -> datetime.date:
+def create_random_date(*, years: List) -> str:
     """
     Picks an year from random_years (created by `create_list_of_years`)
-    and then tries to return a date out of it
+    and then tries to return a date string in ISO 8601 format
     """
     year = random.choice(years)
     month = random.randint(1, 12)
@@ -44,7 +44,7 @@ def create_random_date(*, years: List) -> datetime.date:
         # If the day doesn't exist for that month, try again
         except ValueError:
             pass
-    return date
+    return date.isoformat()
 
 def create_random_name(name: str):
     """
