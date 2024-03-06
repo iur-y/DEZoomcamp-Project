@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import random
 from typing import List
 import datetime
-from constants import VOWELS_SET, L_CONSONANTS, L_VOWELS, U_CONSONANTS, U_VOWELS
+from constants import VOWELS_SET, L_CONSONANTS, L_VOWELS,\
+    U_CONSONANTS, U_VOWELS
 
 vowels_d = {True: U_VOWELS, False: L_VOWELS}
 consonants_d = {True: U_CONSONANTS, False: L_CONSONANTS}

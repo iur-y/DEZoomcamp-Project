@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pyarrow as pa
 
 ##### Constants for random_utils.py #####
@@ -15,6 +17,8 @@ U_CONSONANTS = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P",
 
 ##### Constants for producer.py #####
 BASEFILE = "./base_data/no_year_vgsales.csv"
+
+NUM_ITERATIONS = 10
 
 sale_columns = ("NA_Sales","EU_Sales" ,"JP_Sales" ,"Other_Sales")
 

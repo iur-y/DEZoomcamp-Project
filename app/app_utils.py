@@ -1,4 +1,7 @@
-# Utility functions to be used by app.py
+#!/usr/bin/env python3
+
+# app_utils.py: utility functions to be used by app.py
+
 from dateutil import parser
 from datetime import timezone
 import json # to convert dict to string in get_contents() function
@@ -9,7 +12,7 @@ import duckdb
 
 valid_keys = frozenset(["start", "end"])
 empty_set = set()
-PAGESIZE = 100
+PAGESIZE = 10
 
 def validate_filenames(start, end) -> bool:
     try:
