@@ -45,4 +45,4 @@ def get_contents(*, start, end=None):
     for fname in filenames:
         pq_file = pq.ParquetFile(f"./2024/02/28/{fname}.parquet")
         for i in pq_file.iter_batches(PAGESIZE):
-            yield json.dumps(i.to_pydict())
+            yield json.dumps(i.to_pydict()) + "\n"
