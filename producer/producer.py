@@ -1,5 +1,5 @@
 import pandas as pd
-import random
+import numpy as np
 from random_utils import create_list_of_years, create_num_refunds,\
     create_num_sales, create_random_date, create_random_name
 from constants import BASEFILE, sale_columns, dtypes, schema
@@ -38,30 +38,23 @@ now = dt_obj.isoformat()
 # and them pass those as parameters to this script so it can enter the correct directory
 # app.py will use UTC times to access the directories and read the files as well, so it's important
 writer = pq.ParquetWriter(f'./2024/02/28/{now}.parquet', schema)
-for _ in range(10_000):
-    # Select random record to make fake data from
-    s = df.iloc[[random.randint(0, df.shape[0]-1)]].copy()
 
-    global_sales = 0
 
-    # Modify the value of each sale column such as NA_Sales, EU_Sales, ...
-    for column in sale_columns:
-        temp = create_num_sales(s[column].values[0])
-        global_sales += temp
-        s[column] = temp
+s = df.sample(frac=1.0, replace=True)
+# Modify the value of each sale column such as NA_Sales, EU_Sales, ...
+for column in sale_columns:
+    s[column] = s[column].apply(create_num_sales)
 
-    # Global_Sales is the accumulation of all other regions' sales
-    s["Global_Sales"] = global_sales
+# Global_Sales is the accumulation of all other regions' sales
+s["Global_Sales"] = s.apply(lambda row: row.NA_Sales + row.EU_Sales + row.JP_Sales + row.Other_Sales, axis=1)
 
-    s["Name"] = create_random_name(s["Name"].values[0])
-    s["Date"] = create_random_date(years=years)
-    s["Refunds"] = create_num_refunds(s["Rank"].values[0],
-                                      s["Global_Sales"].values[0])
-    s.drop("Rank", axis=1, inplace=True)
+s["Name"] = s["Name"].apply(create_random_name)
+s["Date"] = np.array([create_random_date(years=years) for _ in range(len(s))])
+s["Refunds"] = s.apply(lambda row: create_num_refunds(row.Rank, row.Global_Sales), axis=1)
+s.drop("Rank", axis=1, inplace=True)
 
-    rb = pa.RecordBatch.from_pandas(s, preserve_index=False, schema=schema)
-    writer.write_batch(rb)
-    # TODO: USE DUCKDB TO READ THE PARQUET WRITTEN FILES
+rb = pa.RecordBatch.from_pandas(s, preserve_index=False, schema=schema)
+writer.write_batch(rb)
 
 writer.close()
 
