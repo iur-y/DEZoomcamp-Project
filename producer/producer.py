@@ -39,7 +39,11 @@ now = dt_obj.isoformat()
 # By the way, when I create the directory 2024/03/04 with bash, I have to use UTC time to create them
 # and them pass those as parameters to this script so it can enter the correct directory
 # app.py will use UTC times to access the directories and read the files as well, so it's important
-writer = pq.ParquetWriter(f'./2024/02/28/{now}.parquet', schema)
+year = dt_obj.year
+month = dt_obj.month
+day = dt_obj.day
+
+writer = pq.ParquetWriter(f'./data/{year}/{month}/{day}/{now}.parquet', schema)
 
 for _ in range(NUM_ITERATIONS): # around (1 MB, 16000 records) per iteration
 
@@ -65,7 +69,7 @@ for _ in range(NUM_ITERATIONS): # around (1 MB, 16000 records) per iteration
 writer.close()
 
 # add filename entry to duckdb
-with duckdb.connect("./2024/02/28/filenames.duckdb") as con:
+with duckdb.connect("./data/filenames.duckdb") as con:
     con.sql("CREATE TABLE IF NOT EXISTS dates (dt_aware TIMESTAMPTZ)")
     stmt = f"INSERT INTO dates VALUES ('{now}')"
     con.sql(stmt)
