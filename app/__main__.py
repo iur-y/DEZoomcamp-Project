@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from flask import Flask, request, abort
-from app.app_utils import validate_filenames, validate_args, get_contents
+from app_utils import validate_filenames, validate_args, get_contents
 
 app = Flask(__name__)
 
@@ -42,4 +42,4 @@ def hand_out_json():
         {"Content-Type": "application/json"}
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
