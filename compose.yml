@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-app
+    ports:
+      - "5000:5000"
+    volumes:
+      - shared_data:/app/data
+      
+  producer:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile-producer
+    volumes:
+      - shared_data:/producer/data
+
+volumes:
+  shared_data:

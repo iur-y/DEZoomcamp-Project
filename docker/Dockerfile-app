@@ -1,0 +1,13 @@
+FROM python:3.10.13-slim-bullseye
+
+WORKDIR /app
+
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir Flask==3.0.2 python-dateutil==2.8.2 pyarrow==15.0.0 duckdb==0.10.0 pytz==2024.1
+
+COPY ./app/* .
+
+# This does not work :)
+RUN ["/bin/bash", "-c", "mkdir -p data/2024/{1..12}/{1..31}"]
+
+ENTRYPOINT [ "python3", "__main__.py"]
