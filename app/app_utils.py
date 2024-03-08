@@ -32,11 +32,11 @@ def get_filenames(*, start, end=None) -> List[Tuple[str]]:
     if start == "beginning":
         query = "SELECT * FROM dates"
         if end:
-            query += f" WHERE dt_aware < '{end}'"
+            query += f" WHERE dt_aware <= '{end}'"
     else:
-        query = f"SELECT * FROM dates WHERE dt_aware >= '{start}'"
+        query = f"SELECT * FROM dates WHERE dt_aware > '{start}'"
         if end:
-            query += f" AND dt_aware < '{end}'"
+            query += f" AND dt_aware <= '{end}'"
     with duckdb.connect("./data/filenames.duckdb") as con:
         result = con.sql(query)
         return result.fetchall()
