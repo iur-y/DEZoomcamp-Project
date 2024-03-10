@@ -2,7 +2,7 @@
 # My test notebooks
 *.ipynb
 # Test data
-2024/
+data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
