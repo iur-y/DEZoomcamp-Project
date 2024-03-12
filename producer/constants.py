@@ -18,7 +18,7 @@ U_CONSONANTS = ["B", "C", "D", "F", "G", "H", "J", "K", "L", "M", "N", "P",
 ##### Constants for producer.py #####
 BASEFILE = "./base_data/vgsales.csv"
 
-NUM_ITERATIONS = 10
+NUM_ITERATIONS = 2
 
 sale_columns = ("NA_Sales","EU_Sales" ,"JP_Sales" ,"Other_Sales")
 
