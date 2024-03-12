@@ -12,7 +12,7 @@ import duckdb
 
 valid_keys = frozenset(["start", "end"])
 empty_set = set()
-PAGESIZE = 10
+PAGESIZE = 200
 
 def validate_filenames(start, end) -> bool:
     try:
@@ -45,8 +45,6 @@ def get_contents(*, start, end=None):
     tuples = get_filenames(start=start, end=end)
     filenames = [t[0].astimezone(timezone.utc).isoformat() for t in tuples]
 
-    # timestamp of the last file so that client can request from there next time
-    yield json.dumps({"Timestamp": filenames[-1]}) + "\n"
     for fname in filenames:
         dt = datetime.fromisoformat(fname)
         year = dt.year
@@ -55,4 +53,6 @@ def get_contents(*, start, end=None):
         pq_file = pq.ParquetFile(
             f"./data/{year}/{month}/{day}/{fname}.parquet")
         for i in pq_file.iter_batches(PAGESIZE):
-            yield json.dumps(i.to_pydict()) + "\n"
+            d = i.to_pydict()
+            d["Timestamp"] = fname # add timestamp key to help client track
+            yield json.dumps(d) + "\n"
