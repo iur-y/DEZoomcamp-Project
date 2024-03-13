@@ -3,7 +3,8 @@ FROM python:3.10.13-slim-bullseye
 WORKDIR /producer
 
 RUN pip install --upgrade pip
-RUN pip install --no-cache-dir numpy==1.26.4 pandas==2.2.1 pyarrow==15.0.0 duckdb==0.10.0
+RUN pip install --no-cache-dir numpy==1.26.4 pandas==2.2.1 pyarrow==15.0.0 \
+                               duckdb==0.10.0
 
 COPY ./producer/* .
 COPY ./base_data/* ./base_data/

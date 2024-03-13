@@ -1,0 +1,6 @@
+FROM apache/airflow:2.8.1
+
+RUN pip install --user --upgrade pip
+RUN pip install --no-cache-dir --user requests==2.31.0 pyarrow==15.0.0 \
+                                      pandas==2.0.3
+RUN pip install 'apache-airflow[google]'
