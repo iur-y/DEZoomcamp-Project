@@ -9,7 +9,7 @@ variable "project_id" {
 variable "credentials" {
   type        = string
   description = "Pathname to your Google Cloud service account key file"
-  default     = "./creds/my-creds.json"
+  default     = "../creds/my-creds.json"
 }
 
 variable "bucket_location" {
