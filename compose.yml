@@ -10,6 +10,7 @@ x-airflow-common:
   build:
     context: .
     dockerfile: ./docker/Dockerfile-airflow
+  env_file: .env
   environment:
     &airflow-common-env
     AIRFLOW_UID: 1000
@@ -52,6 +53,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile-producer
+    container_name: produce-data
     volumes:
       - shared_data:/producer/data
 #########################################
