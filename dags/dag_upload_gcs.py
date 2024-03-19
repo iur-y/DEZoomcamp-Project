@@ -1,7 +1,7 @@
 from airflow.providers.google.cloud.transfers.local_to_gcs import LocalFilesystemToGCSOperator
 from airflow import DAG
 from datetime import datetime, timedelta
-from airflow.utils.dates import days_ago
+from airflow.operators.bash import BashOperator
 
 # These args will get passed on to each operator
 # You can override them on a per-task basis during operator initialization
@@ -11,14 +11,22 @@ default_args = {
     'retry_delay': timedelta(minutes=1),
 }
 
+# This DAG is triggered manually, not through a schedule
 with DAG(
-    dag_id="first-try-at-downloading-files",
+    dag_id="upload-files",
     default_args=default_args,
-    start_date=days_ago(1),
-    schedule_interval="@daily"
 ) as dag:
-    task1 = LocalFilesystemToGCSOperator(
+
+    upload = LocalFilesystemToGCSOperator(
+        task_id="upload_parquet_to_gcs",
         src="./*.parquet",
         bucket="raw_parquet_data_zoomcamp_project",
-        dst="/2024/03/13/" # just missing to figure out how to pass the connection, I think copy creds file to airflow container and export GOOGLE_APPLICATION_CREDENTIALS
+        dst='{{macros.datetime.strptime(ds, "%Y-%m-%d").strftime("dt=%Y-%m-%d/")}}'
     )
+    # Delete local files if they were uploaded to GCS
+    delete = BashOperator(
+        task_id="delete_parquet_files",
+        bash_command="echo deleting $(ls *.parquet); rm *.parquet",
+        cwd="/opt/airflow/")
+
+    upload >> delete

@@ -1,3 +1,6 @@
+# Files inside creds directory, containing Google's service account
+/creds/*
+
 ### Python ###
 # My test notebooks
 *.ipynb
@@ -216,6 +219,5 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-terraform/creds/
 #####################################################################################
 
