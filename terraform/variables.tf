@@ -23,3 +23,9 @@ variable "bucket_storage_class" {
   description = "The storage class for the bucket, e.g. STANDARD, COLDLINE, ARCHIVE"
   default     = "STANDARD"
 }
+
+variable "dataset_location" {
+  type        = string
+  description = "BigQuery dataset location"
+  default     = "us-east1"
+}
