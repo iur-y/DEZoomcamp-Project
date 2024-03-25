@@ -26,6 +26,6 @@ with DAG(
         print(f"Making request to {url}")
         r = requests.get(url)
         print(r.text)
-        return 1
+        return 0
 
     task1 = make_request()
