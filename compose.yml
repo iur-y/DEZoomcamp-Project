@@ -33,6 +33,7 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    - /var/run/docker.sock:/var/run/docker.sock # allow DockerOperator to use images from the Airflow host
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
@@ -41,6 +42,7 @@ x-airflow-common:
 #########################################
 services:
   app:
+    profiles: [app-producer] # do not start this without --profile option
     build:
       context: .
       dockerfile: ./docker/Dockerfile-app
@@ -50,6 +52,7 @@ services:
       - shared_data:/app/data
       
   producer:
+    profiles: [app-producer]
     build:
       context: .
       dockerfile: ./docker/Dockerfile-producer
