@@ -1,9 +1,27 @@
 {{
-    config(materialized='incremental')
+    config(
+        materialized='incremental',
+        partition_by={
+            "field": "Release_Date",
+            "data_type": "date",
+            "granularity": "year"
+        }
+    )
 }}
 
-SELECT *
-FROM {{ source('staging','raw_videogame_table') }}
+SELECT
+    Name,
+    Platform,
+    Genre,
+    Publisher,
+    NA_Sales,
+    EU_Sales,
+    JP_Sales,
+    Other_Sales,
+    Global_Sales,
+    CAST(Date AS DATE) AS Release_Date,
+    Refunds
+FROM {{ source('external','raw_videogame_table') }}
 
 {%- if is_incremental() %}
   -- this filter will only be applied on an incremental run
