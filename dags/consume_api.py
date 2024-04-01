@@ -39,6 +39,7 @@ def make_request(*, url, params, stream=True) -> Generator[bytes, None, None]:
         except:
             print("Request failed with status code:", response.status_code)
             print("Contents:\n", response.text, sep='')
+            response.raise_for_status() # makes task fail for non 200 status
         else:
             gen = response.iter_lines()
             for batch in gen:
@@ -53,6 +54,7 @@ async def write_file(df, timestamp):
     rb = pa.RecordBatch.from_pandas(df, preserve_index=False, schema=schema)
     writer.write_batch(rb)
     writer.close()
+    print(f"Wrote {timestamp}.parquet, returning from write_file function")
     return timestamp
 
 async def get_batches(*, url, params, stream=True, encoding="utf-8"):
@@ -66,7 +68,7 @@ async def get_batches(*, url, params, stream=True, encoding="utf-8"):
 
         if len(counter) == 2:
             print("Resetting the dict and yielding df")
-            yield df, list(counter)[-1] # yields the last key of the dict
+            yield df, list(counter)[0] # yields the first key of the dict
             # After yielding, we create fresh counter and DataFrame
             counter = dict()
             df = pd.DataFrame()

@@ -20,9 +20,10 @@ with DAG(
 ) as dag:
 
     @task(task_id="make_request")
-    def make_request(*, ip="host.docker.internal", port="5000"):
+    def make_request():
         import requests
-        url = f"http://{ip}:{port}"
+        import os
+        url = os.environ["API_URL"]
         print(f"Making request to {url}")
         r = requests.get(url)
         print(r.text)

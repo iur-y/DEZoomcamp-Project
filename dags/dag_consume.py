@@ -13,9 +13,6 @@ default_args = {
     'retry_delay': timedelta(minutes=1),
 }
 
-# API URL
-ENDPOINT = "http://host.docker.internal:5000/data"
-
 with DAG(
     dag_id="download-files",
     default_args=default_args,
@@ -25,8 +22,13 @@ with DAG(
 
     @task(task_id="download_files")
     def download_files(ti=None):
+        import os
         import asyncio
         from consume_api import coordinator
+
+        # API URL
+        ENDPOINT = os.environ["API_URL"] + "/data"
+
         # For the first run, call the API with start="beginning"
         timestamp = Variable.get(key="timestamp", default_var="beginning")
 
