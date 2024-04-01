@@ -6,11 +6,7 @@ x-airflow-common:
   # In order to add custom dependencies or upgrade provider packages you can use your extended image.
   # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
   # and uncomment the "build" line below, Then run `docker-compose build` to build the images.
-  build:
-    context:
-        .
-    dockerfile:
-        Dockerfile-airflow
+  image: airflow:custom
   env_file: .env
   environment:
     &airflow-common-env
@@ -21,11 +17,6 @@ x-airflow-common:
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
-    AIRFLOW__WEBSERVER__WEB_SERVER_SSL_CERT: /opt/airflow/ssl/certificate.crt
-    AIRFLOW__WEBSERVER__WEB_SERVER_SSL_KEY: /opt/airflow/ssl/private_key.key
-    # container is able to access the attached service account to the compute engine instance with this
-    AIRFLOW_CONN_GOOGLE_CLOUD_DEFAULT: 'google-cloud-platform://'
-
     # yamllint disable rule:line-length
     # Use simple http server on scheduler for health checks
     # See https://airflow.apache.org/docs/apache-airflow/stable/administration-and-deployment/logging-monitoring/check-health.html#scheduler-health-check-server
@@ -39,16 +30,30 @@ x-airflow-common:
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
-    - ${AIRFLOW_PROJ_DIR:-.}/ssl:/opt/airflow/ssl
-
+    - /var/run/docker.sock:/var/run/docker.sock # allow DockerOperator to use images from the Airflow host
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on
     postgres:
       condition: service_healthy
-
+#########################################
 services:
-
+  app:
+    profiles: [app-producer] # do not start this without --profile option
+    image: app:1.0
+    ports:
+      - "5000:5000"
+    volumes:
+      - shared_data:/app/data
+      
+  producer:
+    profiles: [app-producer]
+    image: producer:1.0
+    container_name: produce-data
+    volumes:
+      - shared_data:/producer/data
+#########################################
+### SERVICES FROM AIRFLOW COMPOSE.YML ###
   postgres:
     image: postgres:13
     environment:
@@ -170,8 +175,8 @@ services:
       <<: *airflow-common-env
       _AIRFLOW_DB_MIGRATE: 'true'
       _AIRFLOW_WWW_USER_CREATE: 'true'
-      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-myairflowusername}
-      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-myairflowpassword}
+      _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
+      _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
       _PIP_ADDITIONAL_REQUIREMENTS: ''
     user: "0:0"
     volumes:
@@ -191,4 +196,5 @@ services:
       - airflow
 #########################################
 volumes:
+  shared_data:
   postgres-db-volume: # airflow
