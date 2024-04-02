@@ -25,9 +25,11 @@ FROM {{ source('external','raw_videogame_table') }}
 
 {%- if is_incremental() %}
   -- this filter will only be applied on an incremental run
-    WHERE dt = '{{ var("day") }}'
+    WHERE dt = '{{ env_var("EXECUTION_DAY") }}'
 
 {%- else %}
-    WHERE dt = "2024-03-18"
+  -- the `if` above fails if the table doesn't already exist, doesn't matter
+  -- for our artificial case, we still just filter data based on today
+    WHERE dt = '{{ env_var("EXECUTION_DAY") }}'
 
 {% endif %}

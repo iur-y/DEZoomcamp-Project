@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: external
+    database: REPLACE
+    schema: videogame_dataset
+    tables:
+      - name: raw_videogame_table
