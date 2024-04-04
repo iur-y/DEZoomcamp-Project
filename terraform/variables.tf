@@ -1,15 +1,15 @@
 variable "project_id" {
   type        = string
   description = "The id of your Google Cloud Project."
-  # Uncomment the line below and replace
-  # default = REPLACE
+  # Uncomment the line below and replace, keep the double quotes but remove < >
+  #default = "<REPLACE>"
 }
 
 variable "service_account_principal" {
   type        = string
   description = "IAM principal (e-mail) to be used for authentication to Cloud Run services"
-  # Uncomment the line below and replace
-  # default = REPLACE
+  # Uncomment the line below and replace, keep the double quotes but remove < >
+  #default = "<REPLACE>"
 }
 
 variable "credentials" {
