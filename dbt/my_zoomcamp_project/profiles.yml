@@ -1,0 +1,11 @@
+my_zoomcamp_project:
+  target: dev
+  outputs:
+    dev:
+      dataset: videogame_dataset
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      method: oauth
+      priority: interactive
+      threads: 4
+      type: bigquery
