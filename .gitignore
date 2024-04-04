@@ -1,3 +1,11 @@
+# docker
+.docker/
+
+# dbt
+target/
+dependencies.yml
+logs/
+
 # Files inside creds directory, containing Google's service account
 /creds/*
 
