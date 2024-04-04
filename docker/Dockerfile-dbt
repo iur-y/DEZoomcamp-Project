@@ -1,9 +1,8 @@
 FROM ghcr.io/dbt-labs/dbt-bigquery:1.7.latest
 
+WORKDIR /usr/app/dbt
+
 # Copy the whole dbt project
 COPY ./dbt/my_zoomcamp_project/ /usr/app/dbt/
 
-# Copy the credentials file
-COPY ./creds/* /creds/
-
-RUN ls
+ENTRYPOINT ["./entrypoint.sh"]

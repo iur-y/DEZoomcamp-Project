@@ -1,14 +1,16 @@
 FROM python:3.10.13-slim-bullseye
 
 WORKDIR /app
+RUN useradd -m myuser
+RUN chown -R myuser:myuser /app
 
 RUN pip install --upgrade pip
 RUN pip install --no-cache-dir Flask==3.0.2 python-dateutil==2.8.2 \
-                               pyarrow==15.0.0 duckdb==0.10.0 pytz==2024.1
+                               pyarrow==15.0.0 pytz==2024.1 \
+                               google-cloud-storage==2.16.0
 
 COPY ./app/* .
 
-# This does not work :)
-RUN ["/bin/bash", "-c", "mkdir -p data/2024/{1..12}/{1..31}"]
+USER myuser
 
 ENTRYPOINT [ "python3", "__main__.py"]
