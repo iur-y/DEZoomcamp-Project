@@ -17,7 +17,8 @@ with DAG(
     dag_id="download-files",
     default_args=default_args,
     start_date=days_ago(1),
-    schedule_interval="@daily"
+    schedule_interval="*/5 * * * *", # every 5 mins, no catchup
+    catchup=False
 ) as dag:
 
     @task(task_id="download_files")
