@@ -1,9 +1,15 @@
 variable "project_id" {
   type        = string
   description = "The id of your Google Cloud Project."
-  # You can uncomment the line below so terraform doesn't prompt you
-  # for the project id each time
-  #default = <YOUR-PROJECT-ID>
+  # Uncomment the line below and replace
+  # default = REPLACE
+}
+
+variable "service_account_principal" {
+  type        = string
+  description = "IAM principal (e-mail) to be used for authentication to Cloud Run services"
+  # Uncomment the line below and replace
+  # default = REPLACE
 }
 
 variable "credentials" {
@@ -28,4 +34,22 @@ variable "dataset_location" {
   type        = string
   description = "BigQuery dataset location"
   default     = "us-east1"
+}
+
+variable "artifact_registry_location" {
+  type        = string
+  description = "Artifact Registry location"
+  default     = "us-east1"
+}
+
+variable "app_location" {
+  type        = string
+  description = "API service location"
+  default     = "us-east1"
+}
+
+variable "compute_engine_zone" {
+  type        = string
+  description = "Zone for VM instance"
+  default     = "us-east1-b"
 }
