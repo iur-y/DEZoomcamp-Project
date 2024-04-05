@@ -2,6 +2,9 @@
 # Install Docker:
 # Reference: https://docs.docker.com/engine/install/ubuntu/
 
+word="REPLACE"
+num="REPLACE"
+
 # Uninstall conflicting packages
 for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
 
@@ -41,6 +44,9 @@ cd ./dags
 curl -O https://raw.githubusercontent.com/iur-y/DEZoomcamp-Project/main/dags/consume_api.py
 curl -O https://raw.githubusercontent.com/iur-y/DEZoomcamp-Project/main/dags/dag_consume.py
 curl -O https://raw.githubusercontent.com/iur-y/DEZoomcamp-Project/main/dags/dag_upload_gcs.py
+
+# Replace bucket name in dag_upload.gcs.py
+sed -i "s/raw_parquet_data_zoomcamp_project/&_${word}_${num}/" ./dag_upload_gcs.py
 
 # Generate SSL certificates if you wish to access the Airflow web server
 cd "${homedir}/ssl"
