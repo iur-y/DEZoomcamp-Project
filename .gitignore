@@ -7,7 +7,7 @@ dependencies.yml
 logs/
 
 # Files inside creds directory, containing Google's service account
-/creds/*
+creds/my-creds.json
 
 ### Python ###
 # My test notebooks
