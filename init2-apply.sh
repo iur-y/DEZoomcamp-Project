@@ -4,3 +4,4 @@
 
 cd terraform
 terraform apply
+

@@ -77,3 +77,4 @@ docker push "${artifact_location}-docker.pkg.dev/${project_id}/zoomcamp-reposito
 echo "init1-push completed successfully"
 echo "You can proceed to run init2-apply once the time is right"
 exit 0
+
