@@ -39,6 +39,11 @@ resource "google_project_service" "cloudrun_api" {
   service            = "run.googleapis.com"
   disable_on_destroy = true
 }
+resource "google_project_service" "bigquery_api" {
+  project            = var.project_id
+  service            = "bigquery.googleapis.com"
+  disable_on_destroy = true
+}
 ##==##==##==##==##==##==##==##==##==##==##==##
 
 # This bucket is intended to be used by the producer to write data
@@ -142,7 +147,7 @@ resource "google_bigquery_table" "raw_data_table" {
       }
     ])
   }
-  depends_on = [google_bigquery_dataset.dataset]
+  depends_on = [ google_bigquery_dataset.dataset ]
 }
 
 resource "google_artifact_registry_repository" "my-repo" {
@@ -150,6 +155,8 @@ resource "google_artifact_registry_repository" "my-repo" {
   repository_id = "zoomcamp-repository"
   description   = "Holds images for the data source API, dbt and data producer"
   format        = "docker"
+
+  depends_on = [ google_project_service.artifact_api, google_project_service.resource_manager_api ]
 }
 
 # app
@@ -180,7 +187,7 @@ resource "google_cloud_run_v2_service" "app" {
     service_account = var.service_account_principal
   }
   # Impose that the producer (which uploads data to GCS) must exist before the app
-  depends_on = [google_cloud_scheduler_job.data-producer-job]
+  depends_on = [ google_cloud_scheduler_job.data-producer-job ]
 }
 
 # Even though we allow traffic from all IP addresses, this data block and the resource
@@ -201,7 +208,7 @@ resource "google_cloud_run_service_iam_policy" "public" {
 
   policy_data = data.google_iam_policy.public.policy_data
 
-  depends_on = [google_cloud_run_v2_service.app]
+  depends_on = [ google_cloud_run_v2_service.app ]
 }
 
 # VM
@@ -214,7 +221,7 @@ resource "google_compute_instance" "default" {
 
   # Waits for data source API to start, so the startup script
   # used for Airflow can get its IP to make the API requests 
-  depends_on = [google_cloud_run_v2_service.app]
+  depends_on = [ google_cloud_run_v2_service.app ]
 
   # Only required for testing purposes
   # metadata = {
@@ -312,7 +319,7 @@ resource "google_cloud_scheduler_job" "dbt-job" {
     }
   }
 
-  depends_on = [resource.google_cloud_run_v2_job.dbt-job]
+  depends_on = [ resource.google_cloud_run_v2_job.dbt-job ]
 }
 
 # Data producer job
@@ -328,7 +335,7 @@ resource "google_cloud_run_v2_job" "data-producer-job" {
       service_account = var.service_account_principal
     }
   }
-  depends_on = [google_artifact_registry_repository.my-repo, google_storage_bucket.api_producer_data]
+  depends_on = [ google_artifact_registry_repository.my-repo, google_storage_bucket.api_producer_data ]
 }
 
 # Schedule the data producer job
@@ -352,5 +359,5 @@ resource "google_cloud_scheduler_job" "data-producer-job" {
     }
   }
 
-  depends_on = [resource.google_cloud_run_v2_job.data-producer-job]
+  depends_on = [ resource.google_cloud_run_v2_job.data-producer-job ]
 }
