@@ -2,6 +2,12 @@
 
 # init1-push.sh: build and push Docker images to Artifact Registry
 
+# check if pre-init.sh was executed
+if [ ! -e "./pre-init-done" ]; then
+	echo "You must execute pre-init.sh first" 2>&1;
+	exit 1
+fi
+
 # save current directory
 HOMEDIR=$(pwd)
 
@@ -50,7 +56,15 @@ docker build -f docker/Dockerfile-producer -t producer:1.0 .
 
 # create artifact registry repository to store Docker images
 echo "Creating Artifact Registry repository"
-cd terraform && terraform apply -auto-approve -target="google_artifact_registry_repository.my-repo"
+cd terraform
+terraform apply -auto-approve -target="google_project_service.resource_manager_api"
+echo "Waiting a bit to make sure the API is enabled"
+for i in {9..0}; do echo -n $i; sleep 1; echo -ne "\b"; done; echo ""
+terraform apply -auto-approve -target="google_project_service.artifact_api"
+echo "Waiting a bit to make sure the API is enabled"
+for i in {19..10}; do echo -n $i; sleep 1; echo -ne "\b\b"; done; echo -ne "\b\b  "; echo -ne "\b\b"
+for i in {9..0}; do echo -n $i; sleep 1; echo -ne "\b\b"; done; echo ""
+terraform apply -auto-approve -target="google_artifact_registry_repository.my-repo"
 cd "$HOMEDIR"
 
 # get the location of the artifact registry from variables.tf
@@ -74,7 +88,8 @@ docker push "${artifact_location}-docker.pkg.dev/${project_id}/zoomcamp-reposito
 echo "Pushing dbt Docker image to Artifact Registry"
 docker push "${artifact_location}-docker.pkg.dev/${project_id}/zoomcamp-repository/dbt:1.7"
 
+touch init1-done
+
 echo "init1-push completed successfully"
 echo "You can proceed to run init2-apply once the time is right"
 exit 0
-
