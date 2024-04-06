@@ -24,16 +24,16 @@ if [ ! -e "$HOMEDIR/creds/my-creds.json" ]; then
 	exit 1
 fi
 
-# validate .tf files
+# download terraform's google provider
 cd terraform
+terraform init
+
+# validate .tf files
 terraform validate
 if [ $? -ne 0 ]; then
 	echo "Either main.tf of variables.tf has invalid configuration" 2>&1;
 	exit 1
 fi
-
-# download terraform's google provider
-terraform init
 cd "$HOMEDIR"
 
 # extract project_id from variables.tf
@@ -88,8 +88,21 @@ docker push "${artifact_location}-docker.pkg.dev/${project_id}/zoomcamp-reposito
 echo "Pushing dbt Docker image to Artifact Registry"
 docker push "${artifact_location}-docker.pkg.dev/${project_id}/zoomcamp-repository/dbt:1.7"
 
+# Enable other APIs
+cd terraform
+
+terraform apply -auto-approve -target="google_project_service.scheduler_api"
+terraform apply -auto-approve -target="google_project_service.compute_engine_api"
+terraform apply -auto-approve -target="google_project_service.cloudrun_api"
+terraform apply -auto-approve -target="google_project_service.bigquery_api"
+
+echo "Waiting a bit to make sure the APIs are enabled"
+for i in {15..10}; do echo -n $i; sleep 1; echo -ne "\b\b"; done; echo -ne "\b\b  "; echo -ne "\b\b"
+for i in {9..0}; do echo -n $i; sleep 1; echo -ne "\b\b"; done; echo -e "\b\bDone"
+
+# Create
+cd "$HOMEDIR"
 touch init1-done
 
 echo "init1-push completed successfully"
 echo "You can proceed to run init2-apply once the time is right"
-exit 0
