@@ -1,7 +1,7 @@
 # What is this repository?
 It's my capstone project for the data engineering zoomcamp, a free data engineering course, which can be found [here](https://github.com/DataTalksClub/data-engineering-zoomcamp).
 # What is the project about?
-An end-to-end batch data pipeline, including extracting, loading and transforming data, which runs 100% in the clo
+An end-to-end batch data pipeline, including extracting, loading and transforming data, which runs 100% in the cloud.
 
 # Diagram
 ![Diagram](https://github.com/iur-y/DEZoomcamp-Project/blob/main/images/Diagram.png?raw=true)
