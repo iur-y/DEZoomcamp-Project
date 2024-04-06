@@ -18,31 +18,37 @@ resource "google_project_service" "scheduler_api" {
   project            = var.project_id
   service            = "cloudscheduler.googleapis.com"
   disable_on_destroy = true
+  disable_dependent_services = true
 }
 resource "google_project_service" "resource_manager_api" {
   project            = var.project_id
   service            = "cloudresourcemanager.googleapis.com"
   disable_on_destroy = true
+  disable_dependent_services = true
 }
 resource "google_project_service" "artifact_api" {
   project            = var.project_id
   service            = "artifactregistry.googleapis.com"
   disable_on_destroy = true
+  disable_dependent_services = true
 }
 resource "google_project_service" "compute_engine_api" {
   project            = var.project_id
   service            = "compute.googleapis.com"
   disable_on_destroy = true
+  disable_dependent_services = true
 }
 resource "google_project_service" "cloudrun_api" {
   project            = var.project_id
   service            = "run.googleapis.com"
   disable_on_destroy = true
+  disable_dependent_services = true
 }
 resource "google_project_service" "bigquery_api" {
   project            = var.project_id
   service            = "bigquery.googleapis.com"
   disable_on_destroy = true
+  disable_dependent_services = true
 }
 ##==##==##==##==##==##==##==##==##==##==##==##
 
