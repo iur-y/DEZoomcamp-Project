@@ -80,12 +80,14 @@ resource "google_bigquery_dataset" "dataset" {
   description                = "Contains sales data for videogames"
   location                   = var.dataset_location
   delete_contents_on_destroy = true
+  depends_on = [ google_project_service.bigquery_api ]
 }
 
 # dbt needs a table to transform the data, so we make a raw data table
 resource "google_bigquery_table" "raw_data_table" {
   dataset_id = google_bigquery_dataset.dataset.dataset_id
   table_id   = "raw_videogame_table"
+  deletion_protection = false
   # which is partitioned for optimized costs and efficiency
   external_data_configuration {
     # if autodetect = true, then files must exist in the bucket before creating this table
@@ -259,6 +261,7 @@ resource "google_compute_instance" "default" {
     email  = var.service_account_principal
     scopes = ["cloud-platform"]
   }
+  deletion_protection = false
 }
 
 
@@ -295,6 +298,7 @@ resource "google_cloud_run_v2_job" "dbt-job" {
       service_account = var.service_account_principal
     }
   }
+  depends_on = [ google_compute_instance.default ]
 }
 
 # Schedule the dbt job
