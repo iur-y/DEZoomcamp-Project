@@ -2,6 +2,22 @@
 
 # pre-init.sh: get user input to generate a bucket name and replace the code with them
 
+# check if project id and principal were replaced
+# extract project_id from variables.tf
+project_id=$(sed -n "/variable \"project_id\"/{:begin;n;s/.*default[^\"]*\"\(.*\)\".*/\1/p;t;b begin}" terraform/variables.tf)
+
+if echo "$project_id" | grep -q -E "REPLACE"; then
+    echo "Please uncomment and replace the project_id default value in ./terraform/variables.tf" 2>&1;
+    exit 1
+fi
+# extract principal e-mail from variables.tf
+principal=$(sed -n "/variable \"service_account_principal\"/{:begin;n;s/.*default[^\"]*\"\(.*\)\".*/\1/p;t;b begin}" terraform/variables.tf)
+
+if echo "$principal" | grep -q -E "REPLACE"; then
+    echo "Please uncomment and replace the service_account_principal default value in ./terraform/variables.tf" 2>&1;
+    exit 1
+fi
+
 while true; do
     clear
     echo "Enter q to cancel"

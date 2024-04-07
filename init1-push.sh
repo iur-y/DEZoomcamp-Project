@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # init1-push.sh: build and push Docker images to Artifact Registry
-
+set -e
 # check if pre-init.sh was executed
 if [ ! -e "./pre-init-done" ]; then
 	echo "You must execute pre-init.sh first" 2>&1;
