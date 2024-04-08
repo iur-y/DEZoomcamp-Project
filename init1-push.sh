@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # init1-push.sh: build and push Docker images to Artifact Registry
-set -e
+
 # check if pre-init.sh was executed
 if [ ! -e "./pre-init-done" ]; then
 	echo "You must execute pre-init.sh first" 2>&1;
@@ -62,7 +62,7 @@ echo "Waiting a bit to make sure the API is enabled"
 for i in {9..0}; do echo -n $i; sleep 1; echo -ne "\b"; done; echo ""
 terraform apply -auto-approve -target="google_project_service.artifact_api"
 echo "Waiting a bit to make sure the API is enabled"
-for i in {19..10}; do echo -n $i; sleep 1; echo -ne "\b\b"; done; echo -ne "\b\b  "; echo -ne "\b\b"
+for i in {29..10}; do echo -n $i; sleep 1; echo -ne "\b\b"; done; echo -ne "\b\b  "; echo -ne "\b\b"
 for i in {9..0}; do echo -n $i; sleep 1; echo -ne "\b\b"; done; echo ""
 terraform apply -auto-approve -target="google_artifact_registry_repository.my-repo"
 cd "$HOMEDIR"
