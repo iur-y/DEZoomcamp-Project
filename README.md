@@ -42,7 +42,7 @@ Note: the data was generated at random based on a sample file so that I could wo
         * 4.2.6 Service Account User
         * 4.2.7 Service Usage Admin
         * 4.2.8 Storage Admin
-    * 4.3 Click _**DONE**_
+    * 4.3 Click _**CONTINUE**_ > _**DONE**_
     * 4.4 You should see an email address created for the service account that looks like `name@project.iam.gserviceaccount.com`. Copy it to somewhere as it will be needed later
 5. Create a key
     * 5.1 Still in the same service accounts page, you can click on the email and it should redirect you to a page where you can then go to _**KEYS**_ > _**ADD KEY**_ > _**CREATE NEW KEY**_ > _**JSON**_ > _**CREATE**_
