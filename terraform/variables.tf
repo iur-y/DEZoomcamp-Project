@@ -7,7 +7,7 @@ variable "project_id" {
 
 variable "service_account_principal" {
   type        = string
-  description = "IAM principal (e-mail) to be used for authentication to Cloud Run services"
+  description = "IAM principal (email) used by services for authentication to other cloud services"
   # Uncomment the line below and replace, keep the double quotes but remove < >
   #default = "<REPLACE>"
 }
