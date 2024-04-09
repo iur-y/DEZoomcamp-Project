@@ -64,7 +64,7 @@ Note: the data was generated at random based on a sample file so that I could wo
     * 8.3 Cloud Run should have the application running
     * 8.4 Cloud Run Jobs should have two jobs listed
     * 8.5 Cloud Scheduler should have one schedule for each Cloud Run Job
-9. At **hh:00 or hh:20 or hh:40**, the dbt job will start running and create a second table in BigQuery. After the job concludes (check either on the BigQuery page or Cloud Run Jobs page), run
+9. At **hh:00 or hh:20 or hh:40**, the dbt job will start running and create a second table in BigQuery. After the job concludes (check status on the Cloud Run Jobs page), run
     * 9.1 `./terminate1.sh`\
     This will terminate all the major billable resources such as the Compute Engine and Cloud Run service, but it keeps the dataset in BigQuery and the Cloud Storage buckets in case you wish to run queries, inspect the data or use a BI tool to create a dashboard
     * 9.2 `./terminate2.sh`
