@@ -22,14 +22,15 @@ SELECT
     CAST(Date AS DATE) AS Release_Date,
     Refunds
 FROM {{ source('external','raw_videogame_table') }}
+WHERE Publisher IS NOT NULL
 
 {%- if is_incremental() %}
   -- this filter will only be applied on an incremental run
-    WHERE dt = '{{ env_var("EXECUTION_DAY") }}'
+    AND dt = '{{ env_var("EXECUTION_DAY") }}'
 
 {%- else %}
   -- the `if` above fails if the table doesn't already exist, doesn't matter
   -- for our artificial case, we still just filter data based on today
-    WHERE dt = '{{ env_var("EXECUTION_DAY") }}'
+    AND dt = '{{ env_var("EXECUTION_DAY") }}'
 
 {% endif %}
