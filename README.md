@@ -47,7 +47,7 @@ Note: the data was generated at random based on a sample file so that I could wo
 5. Create a key
     * 5.1 Still in the same service accounts page, you can click on the email and it should redirect you to a page where you can then go to _**KEYS**_ > _**ADD KEY**_ > _**CREATE NEW KEY**_ > _**JSON**_ > _**CREATE**_
     * 5.2 Put the key in the _creds_ directory, which is located in the root of the cloned repository
-    * 5.3 Rename the key to my-creds.json
+    * 5.3 Rename the key to **my-creds.json**
 6. Replace the project id and service account email
     * 6.1 Edit the _terraform/variables.tf_ file and replace the fields that are commented out, **keep the double quotes but remove the `<` and `>` symbols**
     * 6.2 Uncomment those two lines, it should look like `default = "your_project_id"` and `default = "your_service_account_email"`
