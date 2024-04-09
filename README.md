@@ -67,7 +67,7 @@ Note: the data was generated at random based on a sample file so that I could wo
 9. At **hh:00 or hh:20 or hh:40**, the dbt job will start running and create a second table in BigQuery. After the job concludes (check status on the Cloud Run Jobs page), run
     * 9.1 `./terminate1.sh`\
     This will terminate all the major billable resources such as the Compute Engine and Cloud Run service, but it preserves the BigQuery dataset and the Cloud Storage buckets in case you wish to run queries, inspect the data or use a BI tool to create a dashboard
-    * 9.2 `./terminate2.sh`
+    * 9.2 `./terminate2.sh`\
     This does _**terraform destroy**_ and will also ask for input. Enter _**yes**_ for confirmation. After that, you can delete the Google Project should you prefer
 
 # Code, infrastructure and project details
