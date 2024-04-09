@@ -57,7 +57,7 @@ Note: the data was generated at random based on a sample file so that I could wo
     * 7.2 `./init1-push.sh`\
         This builds the Docker images and pushes them to Artifact Registry where they are kept. It also uses Terraform to enable the required APIs to do that
     * 7.3 Ideally now you wait until the time is 1 minute before a multiple of 20, i.e. **hh:19 or hh:39 or hh:59** and only then run `./init2-apply.sh`\
-        This is because the dbt container runs following the **\*/20 \* \* \* \*** cron expression, and it won't be created and ready to run in just 1 minute (detailed information about the code is in a section below). Anyway, what _init2-apply.sh_ does is create all the order resources with the command _**terraform apply**_, such as the Compute Engine, Cloud Run application, BigQuery dataset and table and Cloud Run Jobs. Note that you will have to type _**yes**_ for confirmation
+        This is because the dbt container runs following the **\*/20 \* \* \* \*** cron expression, and it won't be created and ready to run in just 1 minute (detailed information about the code is in a section below). Anyway, what _init2-apply.sh_ does is create all the other resources with the command _**terraform apply**_, such as the Compute Engine, Cloud Run application, BigQuery dataset and table and Cloud Run Jobs. Note that you will have to type _**yes**_ for confirmation
 8. Poke around. Now that every resource is created, you can navigate to their respective pages and see what was created:
     * 8.1 Cloud Storage should have two buckets
     * 8.2 BigQuery should have a dataset and a table (two after the dbt job runs)
