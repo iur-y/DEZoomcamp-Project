@@ -96,7 +96,7 @@ The _docker_ directory contains the Dockerfile for building the image to be used
 
 #### <ins>Orchestration</ins>
 Airflow makes the API requests and loads the results to another bucket in GCS.
-There are two DAGs for that: one that makes the request and stores the returned records in a local parquet file, which decouples the task of consuming data from uploading data, and the other that is triggered upon completion of the consuming DAG to perform the uploading.
+There are two DAGs for that: one that makes the request and stores the returned records in local parquet files, which decouples the task of consuming data from uploading data, and the other that is triggered upon completion of the consuming DAG to perform the uploading.
 
 It makes a request for new data every 5 minutes.
 It is (maybe?) easier to use Cloud Composer 2 for deployment, which is Google's managed orchestration service, built on top of Airflow, but it comes as a more expensive alternative. Instead, I decided to go with a Compute Engine instance (look for the _"google_compute_instance"_ resource in _terraform/main.tf_).
