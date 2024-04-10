@@ -54,7 +54,8 @@ for _ in range(NUM_ITERATIONS): # around (1 MB, 16000 records) per iteration
     s.drop("Rank", axis=1, inplace=True)
 
     # ~ 16k records per RecordBatch means 16k records in a parquet row group,
-    # which helps compression, but it's still a small number, as the recommended is 1 GB
+    # which helps compression, but it's still a small number
+    # as the recommended is 1 GB
     rb = pa.RecordBatch.from_pandas(s, preserve_index=False, schema=schema)
     writer.write_batch(rb)
 

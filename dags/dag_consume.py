@@ -56,7 +56,7 @@ with DAG(
         if xcom_value != "None":
             return "trigger-upload-dag"
         else:
-            return None # This means no downstream task should run
+            return None # return None means no downstream task should run
 
     trigger_op = TriggerDagRunOperator(task_id="trigger-upload-dag",
                                        trigger_dag_id="upload-files")

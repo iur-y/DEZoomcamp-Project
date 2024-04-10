@@ -18,6 +18,7 @@ gcs = GcsFileSystem()
 def validate_filenames(start, end) -> bool:
     try:
         if start != "beginning":
+            # delegate validation to dateutil.parser
             start = parser.parse(start)
         if end:
             end = parser.parse(end)
@@ -26,12 +27,19 @@ def validate_filenames(start, end) -> bool:
         return False
 
 def validate_args(d: dict) -> bool:
+    # (parameters passed) - (valid keys) should be empty
+    # and at least "start" should be present
+    # the minus sign represents set difference
     return ((d.keys() - valid_keys) == empty_set) and ("start" in d)
 
 def add_1us(start):
     """
-    Adds one microsecond to start
+    Adds one microsecond to "start"
     This facilitates calling the API with the start argument
+    The returned records after calling the API will include a timestamp
+    value, which will be used by the client as "start" the next time they
+    call the API. If no increment is made to "start", then the same file
+    is retrieved twice.
     """
     one_us = timedelta(microseconds=1)
     dt = datetime.fromisoformat(start)
@@ -39,6 +47,10 @@ def add_1us(start):
     return new_dt.isoformat()
 
 def prepend_yyyy_mm_dd(iso_dt):
+    """
+    This is a helper function to name the files for bucket storage,
+    which groups them in "folders"
+    """
     # iso format: 
     # 2024-03-26T19:58:21.575796+00:00
     # drop everything that comes after T
@@ -53,7 +65,7 @@ def prepend_yyyy_mm_dd(iso_dt):
 
 def iso_from_blob(blobname):
     """
-    Extract valid iso 8601 datetime string from the full blob name
+    Extract valid ISO 8601 datetime string from the full blob name
     in GCS.
 
     Example of blob name:
@@ -67,7 +79,12 @@ def iso_from_blob(blobname):
     return fname.split("/")[-1]
 
 def list_blobs(bucket_name, start=None, end=None):
-
+    """
+    Yields a 2-tuple with the names of the files which the app should
+    get records from and return to client, and also a ISO 8601 string
+    to be used as the returned timestamp, so that client can keep track
+    of which calls have been made
+    """
     if start == "beginning":
         start_offset = None
     else:
@@ -90,7 +107,9 @@ def list_blobs(bucket_name, start=None, end=None):
         yield blob.name, iso_from_blob(blob.name)
 
 def get_contents(*, start, end=None):
-
+    """
+    Reads GCS files and yields paginated records
+    """
     for fname, iso_dt in list_blobs(BUCKET, start=start, end=end):
 
         pq_file = pq.ParquetFile(f"{BUCKET}/{fname}", filesystem=gcs)

@@ -11,12 +11,15 @@ default_args = {
     'retry_delay': timedelta(minutes=1),
 }
 
-# This DAG is triggered manually, not through a schedule
+# This DAG is triggered by dag_consume.py, not through a schedule
 with DAG(
     dag_id="upload-files",
     default_args=default_args,
 ) as dag:
-
+    # upload the local files, the bucket name changes after pre-init.sh runs
+    # dst (destination) is like dt=2024-04-21, which creates something like:
+    # gs://raw_parquet_data_zoomcamp_project/dt=2024-04-21/isodate.parquet
+    # this "folder-like" structure is required for BigQuery partitioning
     upload = LocalFilesystemToGCSOperator(
         task_id="upload_parquet_to_gcs",
         src="./*.parquet",
