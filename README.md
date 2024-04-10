@@ -20,8 +20,9 @@ Note: the data was generated at random based on a sample file so that I could wo
 - Microsoft Power BI for data visualization
 
 # How can I replicate this project?
+I tried to make it as simple as possible. Don't get discouraged by the number of steps, as it boils down to: have Docker and Terraform, create Google Project and service account, run scripts.
 ### I recommend that you read all the steps below from start to finish before replicating them, so you have an idea of what to expect.
-### There's also a section at the end which explains the project in detail
+### There's also a section at the end which explains the project in detail.
 0. Use a Unix-like operating system and make sure you have the _sed_ utility program installed
 1. Install requirements
     * 1.1 [Docker](https://docs.docker.com/get-docker/)
